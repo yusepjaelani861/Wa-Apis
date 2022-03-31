@@ -344,6 +344,14 @@ client.on('chat-update', async chats => {
   }
 });
 
+app.get("/getwebhook", async (req, res) => {
+  let log = req.body;
+  res.status(200).json({
+    status: true,
+    response: log
+    });
+});
+
 app.get("/getChat", async (req, res) => {
   if(status == "NOT READY"){
       return res.status(500).json({
@@ -352,14 +360,26 @@ app.get("/getChat", async (req, res) => {
           data: {}
       });
   }else{
-    // let a = client.chats;
-    // let b = a.dict
-    // //console.log(chats);
+    let a = client.chats;
+    let b = a.dict;
     let final = [];
+    for (let i in b) {
+      
+      if (b[i].messages.dict[Object.keys(b[i].messages.dict)[0]].message != null && b[i].jid != null) {
+        let array = {
+          name : b[i].name,
+          number : reverseNumberFormater(b[i].jid),
+          message : b[i].messages.dict[Object.keys(b[i].messages.dict)[0]].message,
+          
+        }
+        final.push(b);
+      }
+    }
+    
     // for (let chat in b) {
     //     let pesan = await client.loadMessages(chat.jid, 25)
     //     console.log(pesan)
-    //     //final.push(r);
+    //     final.push(pesan);
     // }
     res.status(200).json({
       status: true,
