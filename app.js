@@ -8,11 +8,11 @@ const { phoneNumberFormatter, mimeToMessageType, reverseNumberFormater } = requi
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const mimeTypes = require("mime-types");
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
-const callback_server = "";
+const callback_server = "http://localhost/whatsapp-blast-riyandi-main/";
 
 let client
 
@@ -344,13 +344,7 @@ client.on('chat-update', async chats => {
   }
 });
 
-app.get("/getwebhook", async (req, res) => {
-  let log = req.body;
-  res.status(200).json({
-    status: true,
-    response: log
-    });
-});
+
 
 app.get("/getChat", async (req, res) => {
   if(status == "NOT READY"){
@@ -361,26 +355,14 @@ app.get("/getChat", async (req, res) => {
       });
   }else{
     let a = client.chats;
-    let b = a.dict;
+    let b = a.dict
+    console.log(b);
     let final = [];
-    for (let i in b) {
-      
-      if (b[i].messages.dict[Object.keys(b[i].messages.dict)[0]].message != null && b[i].jid != null) {
-        let array = {
-          name : b[i].name,
-          number : reverseNumberFormater(b[i].jid),
-          message : b[i].messages.dict[Object.keys(b[i].messages.dict)[0]].message,
-          
-        }
-        final.push(b);
-      }
+    for (let chat in b) {
+        let pesan = await client.loadMessages(chat.jid, 25)
+        console.log(pesan)
+        final.push(a);
     }
-    
-    // for (let chat in b) {
-    //     let pesan = await client.loadMessages(chat.jid, 25)
-    //     console.log(pesan)
-    //     final.push(pesan);
-    // }
     res.status(200).json({
       status: true,
       response: final
