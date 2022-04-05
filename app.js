@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 
-const callback_server = "http://localhost/whatsapp-blast-riyandi-main/";
+const callback_server = "https://wa-api.mitehost.my.id/";
 
 let client
 
